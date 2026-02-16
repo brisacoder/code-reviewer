@@ -111,6 +111,28 @@ class ModelReviewResult(TypedDict):
     issues: list[ReviewIssue]
 
 
+class WrittenFile(TypedDict):
+    """Represent one file produced by the writer agent.
+
+    Args:
+        None.
+
+    Returns:
+        None.
+
+    Example:
+        >>> written: WrittenFile = {
+        ...     "file_path": "src/utils.py",
+        ...     "content": "def add(a: int, b: int) -> int:\\n    return a + b\\n",
+        ...     "action": "create",
+        ... }
+    """
+
+    file_path: str
+    content: str
+    action: Literal["create", "modify"]
+
+
 class GraphState(TypedDict, total=False):
     """Capture shared state passed through LangGraph nodes.
 
@@ -132,10 +154,12 @@ class GraphState(TypedDict, total=False):
     desired_action: Literal["create", "modify", "review"]
     target_file: str
     target_files: list[str]
+    context_files: list[str]
     coding_standards: list[str]
 
     draft_code: str
     writer_notes: str
+    written_files: list[WrittenFile]
 
     review_report: ReviewReport
     review_issues: list[ReviewIssue]

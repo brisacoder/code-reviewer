@@ -25,6 +25,7 @@ from langgraph.types import Command
 from code_reviewer_graph.reviewer_engine import get_target_files
 from code_reviewer_graph.reviewer_engine import run_multi_model_review
 from code_reviewer_graph.state import GraphState
+from code_reviewer_graph.writer_engine import run_writer
 
 
 def entry_node(state: GraphState) -> Any:
@@ -82,30 +83,27 @@ def supervisor_node(
 
 
 def writer_node(state: GraphState) -> Any:
-    """Return placeholder writer output and route back to supervisor.
+    """Run the writer engine to produce or modify target files and route to supervisor.
 
     Args:
-        state: Current graph state with request and standards context.
+        state: Current graph state with request, target files, and optional review feedback.
 
     Returns:
-        A command routing to supervisor with placeholder writer updates.
+        A command routing to supervisor with writer output updates.
 
     Example:
-        >>> command = writer_node({"draft_code": ""})
+        >>> command = writer_node({"target_files": ["src/app.py"], "request": "Add docstrings"})
         >>> command.goto
         'supervisor'
     """
 
-    writer_notes = (
-        "Writer placeholder output; implement file creation/"
-        "modification logic later."
-    )
+    writer_updates = run_writer(state)
+
     return Command(
         goto="supervisor",
         update={
             "last_actor": "writer",
-            "writer_notes": writer_notes,
-            "draft_code": state.get("draft_code", ""),
+            **writer_updates,
         },
     )
 

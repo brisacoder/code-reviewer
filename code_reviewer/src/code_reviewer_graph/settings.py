@@ -51,6 +51,8 @@ class Settings:
     anthropic_base_url: str | None
 
     reviewer_rules_file: str
+    writer_rules_file: str
+    writer_model: str
 
 
 def get_settings() -> Settings:
@@ -68,9 +70,9 @@ def get_settings() -> Settings:
         True
     """
 
-    default_rules_file = str(
-        Path(__file__).resolve().parent / "review_rules.md"
-    )
+    package_dir = Path(__file__).resolve().parent
+    default_review_rules_file = str(package_dir / "review_rules.md")
+    default_writer_rules_file = str(package_dir / "writer_rules.md")
     load_dotenv()
     return Settings(
         openrouter_api_key=os.getenv("OPENROUTER_API_KEY"),
@@ -94,6 +96,14 @@ def get_settings() -> Settings:
         anthropic_base_url=os.getenv("ANTHROPIC_BASE_URL", "https://openrouter.ai/api/v1"),
         reviewer_rules_file=os.getenv(
             "REVIEWER_RULES_FILE",
-            default_rules_file,
+            default_review_rules_file,
+        ),
+        writer_rules_file=os.getenv(
+            "WRITER_RULES_FILE",
+            default_writer_rules_file,
+        ),
+        writer_model=os.getenv(
+            "WRITER_MODEL",
+            "anthropic/claude-opus-4.6",
         ),
     )

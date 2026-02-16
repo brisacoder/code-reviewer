@@ -35,6 +35,7 @@ code-reviewer-graph = "code_reviewer_graph.cli:main"
 packages = ["src/code_reviewer_graph"]
 include = [
     "src/code_reviewer_graph/review_rules.md",
+    "src/code_reviewer_graph/writer_rules.md",
 ]
 
 [tool.hatch.build.targets.sdist]
