@@ -1,0 +1,13 @@
+[project]
+name = "code-reviewer-workspace"
+version = "0.0.0"
+requires-python = ">=3.13"
+dependencies = [
+    "code-reviewer",
+]
+
+[tool.uv.workspace]
+members = ["code_reviewer"]
+
+[tool.uv.sources]
+code-reviewer = { workspace = true }
